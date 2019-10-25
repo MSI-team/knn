@@ -25,10 +25,8 @@ namespace PizzatoWebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(IFormFile csvFile)
         {
-            if (csvFile.Length < 1)
-            {
+            if (csvFile is null)
                 return BadRequest();
-            }
 
             using (var stream = csvFile.OpenReadStream())
             using (StreamReader reader = new StreamReader(stream))

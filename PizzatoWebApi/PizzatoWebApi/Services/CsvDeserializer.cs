@@ -12,7 +12,7 @@ namespace PizzatoWebApi.Services
         {
             var restaurants = new List<Restaurant>();
 
-            foreach (var line in csvContent.Split("\n"))
+            foreach (var line in csvContent.Split(Environment.NewLine))
             {
                 var data = line.Split(";");
                 var tags = data[3].Split(",");
