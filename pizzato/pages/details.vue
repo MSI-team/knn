@@ -6,7 +6,7 @@
       </div>
       <div class="column is-two-thirds details-container">
         <p class="title">{{currentRestaurant.name}}</p>
-        <p>{{currentRestaurant.city}}</p>
+        <p class="subtitle">{{currentRestaurant.city}}</p>
         <ul
           v-for="attribute in currentRestaurant.attributeList"
           v-bind:key="attribute.name"
@@ -20,26 +20,24 @@
 
     <!-- podobne -->
     <div class="similar-container">
-        <p class="title">Podobne</p>
-        <nav class="level">
+      <p class="title">Podobne</p>
+      <nav class="level">
         <div
-            v-for="restaurant in restaurants"
-            v-bind:key="restaurant.id"
-            class="level-item has-text-centered"
+          v-for="restaurant in restaurants"
+          v-bind:key="restaurant.id"
+          class="level-item has-text-centered"
         >
-            <a href="#">
-                <img :src="restaurant.imageUrl" width="64" />
-                <p>{{restaurant.name}}</p>
-            </a>
+          <a href="#">
+            <img :src="restaurant.imageUrl" width="64" />
+            <p>{{restaurant.name}}</p>
+          </a>
         </div>
-        </nav>
+      </nav>
     </div>
   </div>
 </template>
 
 <script>
-// import axios from '@nuxtjs/axios'
-
 export default {
   props: ['restaurantId'],
   data () {
@@ -63,13 +61,33 @@ export default {
       ]
     }
   },
-  create () {},
+  beforeMount () {
+    const loading = this.$buefy.loading.open({
+      container: null
+    })
+    this.getRestaurantData(this.$props.id)
+    loading.close()
+  },
   methods: {
-    rateSuccess () {
+    tostify (toastMessage, success) {
       this.$buefy.toast.open({
-        message: 'Dziękujemy za wysłanie opinii!',
-        type: 'is-success'
+        message: toastMessage,
+        type: success ? 'is-success' : 'is-warning'
       })
+    },
+    rateSuccess () {
+      this.tostify('Dziękujemy za wysłanie opinii!', true)
+    },
+    getRestaurantData (id) {
+      return this.$axios
+        .get('~/api/Restaurant/GetRestaurant?' + id)
+        .then((response) => {
+          this.currentRestaurant = response.data
+        })
+        .catch((error) => {
+          console.log(error)
+          this.tostify('Błąd! Nie można pobrać danych restauracji!')
+        })
     }
   }
 }
