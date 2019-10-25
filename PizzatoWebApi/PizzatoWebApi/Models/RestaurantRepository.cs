@@ -40,12 +40,22 @@ namespace PizzatoWebApi.Models
 
         public IEnumerable<string> GetUsedTags()
         {
-            return Restaurants.SelectMany(r => r.Tags).Distinct();
+            return Restaurants.SelectMany(r => r.Tags).Distinct().OrderBy(r => r);
         }
 
         public IEnumerable<Restaurant> GetRestaurantsByTag(string tag)
         {
             return Restaurants.Where(r => r.Tags.Contains(tag));
+        }
+
+        public void RecalculateFeatureVectors()
+        {
+            var tags = GetUsedTags().ToList();
+
+            foreach(var restaurant in Restaurants)
+            {
+                restaurant.FeatureVector = FeatureVectorCalculator.CalculateFeatureVector(restaurant.Tags, tags);
+            }
         }
     }
 }

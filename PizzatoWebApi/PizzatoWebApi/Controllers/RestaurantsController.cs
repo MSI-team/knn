@@ -15,10 +15,12 @@ namespace PizzatoWebApi.Controllers
     public class RestaurantsController : ControllerBase
     {
         private IRestaurantRepository _restaurantRepository;
+        private ICsvDeserializer _csvDeserializer;
 
-        public RestaurantsController(IRestaurantRepository repository)
+        public RestaurantsController(IRestaurantRepository repository, ICsvDeserializer csvDeserializer)
         {
             _restaurantRepository = repository;
+            _csvDeserializer = csvDeserializer;
         }
         
         // POST api/restaurants
@@ -32,7 +34,7 @@ namespace PizzatoWebApi.Controllers
             using (StreamReader reader = new StreamReader(stream))
             {
                 var data = await reader.ReadToEndAsync();
-                var restaurants = CsvDeserializer.Deserialize(data);
+                var restaurants = _csvDeserializer.Deserialize(data);
 
                 _restaurantRepository.ClearRepository();
                 _restaurantRepository.AddRestaurantsRange(restaurants);

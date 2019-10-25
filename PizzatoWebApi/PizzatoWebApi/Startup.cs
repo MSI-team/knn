@@ -12,7 +12,7 @@ using Microsoft.Extensions.Options;
 using PizzatoWebApi.Models;
 using PizzatoWebApi.Models.FakeModels;
 using Microsoft.OpenApi.Models;
-
+using PizzatoWebApi.Services;
 
 namespace PizzatoWebApi
 {
@@ -34,6 +34,7 @@ namespace PizzatoWebApi
 
             services.AddSingleton<IRestaurantRepository, RestaurantRepository>();
             services.AddSingleton<IRecommenderService, RecommenderService>();
+            services.AddTransient<ICsvDeserializer, CsvDeserializer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

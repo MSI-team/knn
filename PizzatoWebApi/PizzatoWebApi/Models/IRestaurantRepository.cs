@@ -20,5 +20,7 @@ namespace PizzatoWebApi.Models
         IEnumerable<Restaurant> GetRestaurantsByTag(string tag);
 
         IEnumerable<string> GetUsedTags();
+
+        void RecalculateFeatureVectors();
     }
 }

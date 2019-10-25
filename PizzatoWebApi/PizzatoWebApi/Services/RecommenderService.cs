@@ -17,6 +17,7 @@ namespace PizzatoWebApi
 
         public IEnumerable<Restaurant> Recommend(int restaurantId, string city, int recommendationsCount)
         {
+            _restaurantRepository.RecalculateFeatureVectors();
             return KNearestNeighboursSearch(restaurantId, _restaurantRepository.GetRestaurantsFromCity(city), recommendationsCount);
         }
 

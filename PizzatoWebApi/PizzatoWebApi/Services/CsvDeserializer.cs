@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace PizzatoWebApi.Services
 {
-    public static class CsvDeserializer
+    public class CsvDeserializer : ICsvDeserializer
     {
-        public static IList<Restaurant> Deserialize(string csvContent)
+        public IList<Restaurant> Deserialize(string csvContent)
         {
             var restaurants = new List<Restaurant>();
 
