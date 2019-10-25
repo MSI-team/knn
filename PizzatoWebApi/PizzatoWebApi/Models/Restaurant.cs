@@ -26,5 +26,6 @@ namespace PizzatoWebApi.Models
 
         [JsonIgnore]
         public long FeatureVector { get; set; }
+
     }
 }
