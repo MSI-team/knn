@@ -28,9 +28,9 @@
             class="level-item has-text-centered"
         >
             <a href="#">
-            <img :src="restaurant.imageUrl" />
+                <img :src="restaurant.imageUrl" width="64" />
+                <p>{{restaurant.name}}</p>
             </a>
-            {{restaurant.name}}
         </div>
         </nav>
     </div>
@@ -57,9 +57,9 @@ export default {
         ]
       },
       restaurants: [
-        { name: 'KFC', imageUrl: '' },
-        { name: 'Kura', imageUrl: '' },
-        { name: 'Bobby Burger', imageUrl: '' }
+        { name: 'KFC', imageUrl: 'http://media1.s-nbcnews.com/j/msnbc/Components/Photos/061113/061113_kfc_logo_vmed5p.grid-4x2.jpg' },
+        { name: 'Kura', imageUrl: 'http://restauracjakura.pl/wp-content/uploads/2019/02/logo-restauracja-kura-biale.png' },
+        { name: 'Bobby Burger', imageUrl: 'https://bobbyburger.pl/wp-content/uploads/2019/04/Bobby-Burger-logo.png' }
       ]
     }
   },
