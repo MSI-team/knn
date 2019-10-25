@@ -22,5 +22,10 @@ namespace PizzatoWebApi.Models
                 AddRestaurant(restaurant);
             }
         }
+
+        public List<Restaurant> GetRestaurantsFromCity(string city)
+        {
+            return Restaurants.Where(r => r.City == city).ToList();
+        }
     }
 }
