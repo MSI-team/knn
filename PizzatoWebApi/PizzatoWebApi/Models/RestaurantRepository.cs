@@ -11,7 +11,7 @@ namespace PizzatoWebApi.Models
 
         public void AddRestaurant(Restaurant restaurant)
         {
-            restaurant.Id = Restaurants.Max(r => r.Id) + 1;
+            restaurant.Id = !Restaurants.Any() ? 1 : Restaurants.Max(r => r.Id) + 1;
             Restaurants.Add(restaurant);
         }
 

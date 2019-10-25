@@ -45,5 +45,30 @@ namespace PizzatoWebApi.Controllers
         {
             return Ok(_restaurantRepository.Restaurants);
         }
+
+        // GET api/restaurant/{id}
+        [HttpGet("{id}")]
+        public ActionResult<Restaurant> Get(int id)
+        {
+            var restaurant = _restaurantRepository.Restaurants.FirstOrDefault(r => r.Id == id);
+            if(restaurant is null)
+            {
+                return BadRequest();
+            }
+
+            return restaurant;
+        }
+
+        [HttpPost("add")]
+        public IActionResult Post([FromBody] Restaurant restaurant)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            _restaurantRepository.AddRestaurant(restaurant);
+            return Ok(restaurant.Id);
+        }
     }
 }
