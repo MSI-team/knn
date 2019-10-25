@@ -32,5 +32,10 @@ namespace PizzatoWebApi.Models
         {
             return Restaurants.AsEnumerable();
         }
+
+        public IList<Restaurant> GetRestaurantsFromCity(string city)
+        {
+            return Restaurants.Where(r => r.City == city).ToList();
+        }
     }
 }

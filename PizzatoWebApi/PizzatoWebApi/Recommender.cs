@@ -8,10 +8,19 @@ namespace PizzatoWebApi
 {
     public class Recommender
     {
-        private List<(int, Restaurant)> restaurantNeighbours = new List<(int, Restaurant)>();
+        private RestaurantRepository restaurantRepository;
 
-        public List<Restaurant> KNearestNeighboursSearch(Restaurant restaurant, List<Restaurant> restaurants, int k)
+        public Recommender(RestaurantRepository repository)
         {
+            restaurantRepository = repository;
+        }
+        public List<Restaurant> Recommend(Restaurant restaurant, string city, int recommendationsCount)
+        {
+            return KNearestNeighboursSearch(restaurant, restaurantRepository.GetRestaurantsFromCity(city), recommendationsCount);
+        }
+        private List<Restaurant> KNearestNeighboursSearch(Restaurant restaurant, List<Restaurant> restaurants, int k)
+        {
+            List<(int, Restaurant)> restaurantNeighbours = new List<(int, Restaurant)>();
             foreach (Restaurant r in restaurants)
             {
                 if (r == restaurant)
