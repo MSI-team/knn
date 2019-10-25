@@ -1,38 +1,21 @@
 <template>
   <div>
     <nav
-      class="navbar header has-shadow is-primary"
+      class="navbar header has-shadow is-danger"
       role="navigation"
       aria-label="main navigation"
     >
-      <div class="navbar-brand">
-        <a class="navbar-item" href="/">
-          <img src="~assets/buefy.png" alt="Buefy" height="28" />
-        </a>
-
-        <div class="navbar-burger">
-          <span />
-          <span />
-          <span />
+      <div class="navbar-item center">
+        <div class="full-width columns">
+          <div class="container column is-8">
+            <p class="logo-content">🍕Pizzato</p>
+          </div>
         </div>
       </div>
     </nav>
 
     <section class="main-content columns">
-      <aside class="column is-2 section">
-        <p class="menu-label is-hidden-touch">
-          General
-        </p>
-        <ul class="menu-list">
-          <li v-for="(item, key) of items" :key="key">
-            <nuxt-link :to="item.to" exact-active-class="is-active">
-              <b-icon :icon="item.icon" /> {{ item.title }}
-            </nuxt-link>
-          </li>
-        </ul>
-      </aside>
-
-      <div class="container column is-10">
+      <div class="container column is-8">
         <nuxt />
       </div>
     </section>
@@ -59,3 +42,21 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.full-width {
+  width: 100%;
+}
+
+.navbar-item.center {
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.logo-content {
+  font-family: Rubik, sans-serif;
+  color: #fff;
+  font-weight: bold;
+}
+</style>
