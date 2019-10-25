@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +11,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using PizzatoWebApi.Models;
 using PizzatoWebApi.Models.FakeModels;
+using Microsoft.OpenApi.Models;
+
 
 namespace PizzatoWebApi
 {
@@ -27,6 +29,9 @@ namespace PizzatoWebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" }));
+
             services.AddSingleton<IRestaurantRepository, RestaurantRepository>();
             services.AddSingleton<IRecommenderService, RecommenderService>();
         }
@@ -38,6 +43,13 @@ namespace PizzatoWebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             app.UseMvc();
         }
