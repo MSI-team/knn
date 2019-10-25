@@ -16,5 +16,9 @@ namespace PizzatoWebApi.Models
         void ClearRepository();
 
         IEnumerable<Restaurant> GetRestaurantsFromCity(string city);
+
+        IEnumerable<Restaurant> GetRestaurantsByTag(string tag);
+
+        IEnumerable<string> GetUsedTags();
     }
 }

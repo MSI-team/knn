@@ -37,5 +37,15 @@ namespace PizzatoWebApi.Models
         {
             return Restaurants.Where(r => r.City == city).ToList();
         }
+
+        public IEnumerable<string> GetUsedTags()
+        {
+            return Restaurants.SelectMany(r => r.Tags).Distinct();
+        }
+
+        public IEnumerable<Restaurant> GetRestaurantsByTag(string tag)
+        {
+            return Restaurants.Where(r => r.Tags.Contains(tag));
+        }
     }
 }
