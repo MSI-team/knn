@@ -56,7 +56,7 @@ export default {
       },
       restaurants: [
         { name: 'KFC', imageUrl: 'http://media1.s-nbcnews.com/j/msnbc/Components/Photos/061113/061113_kfc_logo_vmed5p.grid-4x2.jpg' },
-        { name: 'Kura', imageUrl: 'http://restauracjakura.pl/wp-content/uploads/2019/02/logo-restauracja-kura-biale.png' },
+        { name: 'Kura', imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSogI6iHb5flBaMqSTbyZ3G5s_Wn6TBbQv7Np8tnnUMB0B5oqIs' },
         { name: 'Bobby Burger', imageUrl: 'https://bobbyburger.pl/wp-content/uploads/2019/04/Bobby-Burger-logo.png' }
       ]
     }
