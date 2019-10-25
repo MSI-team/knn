@@ -12,6 +12,7 @@ namespace PizzatoWebApi.Models
         void AddRestaurant(Restaurant restaurant);
 
         void AddRestaurantsRange(IEnumerable<Restaurant> restaurants);
+
         IEnumerable<Restaurant> GetRestaurantsFromCity(string city);
     }
 }
