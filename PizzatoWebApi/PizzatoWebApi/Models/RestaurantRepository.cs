@@ -23,7 +23,7 @@ namespace PizzatoWebApi.Models
             }
         }
 
-        public List<Restaurant> GetRestaurantsFromCity(string city)
+        public IEnumerable<Restaurant> GetRestaurantsFromCity(string city)
         {
             return Restaurants.Where(r => r.City == city).ToList();
         }

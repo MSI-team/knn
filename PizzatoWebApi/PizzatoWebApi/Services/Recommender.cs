@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace PizzatoWebApi
 {
-    public class Recommender
+    public class RecommenderService
     {
-        private RestaurantRepository restaurantRepository;
+        private IRestaurantRepository restaurantRepository;
 
-        public Recommender(RestaurantRepository repository)
+        public RecommenderService(IRestaurantRepository repository)
         {
             restaurantRepository = repository;
         }
-        public List<Restaurant> Recommend(Restaurant restaurant, string city, int recommendationsCount)
+        public IEnumerable<Restaurant> Recommend(Restaurant restaurant, string city, int recommendationsCount)
         {
             return KNearestNeighboursSearch(restaurant, restaurantRepository.GetRestaurantsFromCity(city), recommendationsCount);
         }
-        private List<Restaurant> KNearestNeighboursSearch(Restaurant restaurant, List<Restaurant> restaurants, int k)
+        private IEnumerable<Restaurant> KNearestNeighboursSearch(Restaurant restaurant, IEnumerable<Restaurant> restaurants, int k)
         {
             List<(int, Restaurant)> restaurantNeighbours = new List<(int, Restaurant)>();
             foreach (Restaurant r in restaurants)
