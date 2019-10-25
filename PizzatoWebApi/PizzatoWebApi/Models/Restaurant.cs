@@ -8,11 +8,13 @@ namespace PizzatoWebApi.Models
 {
     public class Restaurant
     {
+        public int? Id { get; set; }
+
         public string Name { get; set; }
 
         public string City { get; set; }
 
-        public string Adres { get; set; }
+        public string Address { get; set; }
 
         public List<string> Tags { get; set; }
 
