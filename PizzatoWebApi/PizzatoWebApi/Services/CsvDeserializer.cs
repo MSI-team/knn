@@ -19,10 +19,10 @@ namespace PizzatoWebApi.Services
 
                 restaurants.Add(new Restaurant
                 {
-                    Name = data[0],
-                    City = data[1],
-                    Address = data[2],
-                    Tags = tags.ToList()
+                    Name = data[0].Trim(),
+                    City = data[1].Trim(),
+                    Address = data[2].Trim(),
+                    Tags = tags.Select(t=>t.Trim()).ToList()
                 });
             }
 

@@ -24,7 +24,7 @@ namespace PizzatoWebApi
         private IEnumerable<Restaurant> KNearestNeighboursSearch(int restaurantId, IEnumerable<Restaurant> restaurants, int k)
         {
             var restaurantNeighbours = new List<(int distance, Restaurant restaurant)>();
-            var restaurant = restaurants.FirstOrDefault(r => r.Id == restaurantId);
+            var restaurant = _restaurantRepository.GetRestaurants().FirstOrDefault(r => r.Id == restaurantId);
 
             if (restaurant is null)
             {

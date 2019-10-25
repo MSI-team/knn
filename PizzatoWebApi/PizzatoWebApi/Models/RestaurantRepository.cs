@@ -33,9 +33,14 @@ namespace PizzatoWebApi.Models
             return Restaurants.AsEnumerable();
         }
 
+        public IEnumerable<string> GetCities()
+        {
+            return Restaurants.Select(r => r.City).Distinct();
+        }
+
         public IEnumerable<Restaurant> GetRestaurantsFromCity(string city)
         {
-            return Restaurants.Where(r => r.City == city).ToList();
+            return Restaurants.Where(r => r.City == city);
         }
 
         public IEnumerable<string> GetUsedTags()
