@@ -22,18 +22,19 @@ namespace PizzatoWebApi.Controllers
         }
         
         // POST api/restaurants
-        [HttpPost]
-        public async Task<IActionResult> Post(IFormFile csvFile)
+        [HttpPost("import")]
+        public async Task<IActionResult> Post(IFormFile file)
         {
-            if (csvFile is null)
+            if (file is null)
                 return BadRequest();
 
-            using (var stream = csvFile.OpenReadStream())
+            using (var stream = file.OpenReadStream())
             using (StreamReader reader = new StreamReader(stream))
             {
                 var data = await reader.ReadToEndAsync();
                 var restaurants = CsvDeserializer.Deserialize(data);
 
+                _restaurantRepository.ClearRepository();
                 _restaurantRepository.AddRestaurantsRange(restaurants);
             }
 
@@ -41,16 +42,16 @@ namespace PizzatoWebApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<IEnumerable<Restaurant>> Get()
         {
-            return Ok(_restaurantRepository.Restaurants);
+            return Ok(_restaurantRepository.GetRestaurants());
         }
 
         // GET api/restaurant/{id}
         [HttpGet("{id}")]
         public ActionResult<Restaurant> Get(int id)
         {
-            var restaurant = _restaurantRepository.Restaurants.FirstOrDefault(r => r.Id == id);
+            var restaurant = _restaurantRepository.GetRestaurants().FirstOrDefault(r => r.Id == id);
             if(restaurant is null)
             {
                 return BadRequest();

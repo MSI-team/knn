@@ -22,5 +22,15 @@ namespace PizzatoWebApi.Models
                 AddRestaurant(restaurant);
             }
         }
+
+        public void ClearRepository()
+        {
+            Restaurants.Clear();
+        }
+
+        public IEnumerable<Restaurant> GetRestaurants()
+        {
+            return Restaurants.AsEnumerable();
+        }
     }
 }

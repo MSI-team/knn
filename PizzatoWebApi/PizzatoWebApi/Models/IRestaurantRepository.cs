@@ -7,10 +7,12 @@ namespace PizzatoWebApi.Models
 {
     public interface IRestaurantRepository
     {
-        IList<Restaurant> Restaurants { get; set; }
-
         void AddRestaurant(Restaurant restaurant);
 
         void AddRestaurantsRange(IEnumerable<Restaurant> restaurants);
+
+        IEnumerable<Restaurant> GetRestaurants();
+
+        void ClearRepository();
     }
 }
