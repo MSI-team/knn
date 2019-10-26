@@ -2,13 +2,13 @@
   <div class="container">
     <div class="columns restaurant-container">
       <div class="column">
-        <img :src="currentRestaurant.imageUrl" />
+        <img :src="currentRestaurant.photoUrl" />
       </div>
       <div class="column is-two-thirds details-container">
         <p class="title">{{currentRestaurant.name}}</p>
         <p class="subtitle">{{currentRestaurant.city}}</p>
         <ul
-          v-for="attribute in currentRestaurant.attributeList"
+          v-for="attribute in currentRestaurant.tags"
           v-bind:key="attribute.name"
           class="attr-list"
         >
@@ -20,7 +20,7 @@
 
     <!-- podobne -->
     <div class="similar-container">
-      <p class="title">Podobne</p>
+      <!-- <p class="title">Podobne</p>
       <nav class="level">
         <div
           v-for="restaurant in restaurants"
@@ -32,40 +32,38 @@
             <p>{{restaurant.name}}</p>
           </a>
         </div>
-      </nav>
+      </nav> -->
+      <cards-list :cards="restaurants" :label="'Polecane'" />
     </div>
   </div>
 </template>
 
 <script>
+import CardsList from '../components/CardsList'
+import RestaurantRepository from '../repositories/restaurantRepository'
+
 export default {
-  props: ['restaurantId'],
+  name: "Details",
+  props: ['id'],
+  components: { CardsList },
   data () {
     return {
       currentRestaurant: {
         id: 0,
-        imageUrl:
-          'https://static.pepper.pl/live_pl/threads/thread_large/default/146522_1.jpg',
-        name: 'McDonalds',
-        city: 'Warszawa',
-        attributeList: [
-          { name: 'Fast-food' },
-          { name: 'Hamburgery' },
-          { name: 'Tanio' }
-        ]
+        photoUrl: '',
+        name: '',
+        city: '',
+        tags: []
       },
-      restaurants: [
-        { name: 'KFC', imageUrl: 'http://media1.s-nbcnews.com/j/msnbc/Components/Photos/061113/061113_kfc_logo_vmed5p.grid-4x2.jpg' },
-        { name: 'Kura', imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSogI6iHb5flBaMqSTbyZ3G5s_Wn6TBbQv7Np8tnnUMB0B5oqIs' },
-        { name: 'Bobby Burger', imageUrl: 'https://bobbyburger.pl/wp-content/uploads/2019/04/Bobby-Burger-logo.png' }
-      ]
+      restaurants: []
     }
   },
-  beforeMount () {
+  async beforeMount () {
     const loading = this.$buefy.loading.open({
       container: null
     })
-    this.getRestaurantData(this.$props.id ? this.$props.id : 1)
+    await this.getRestaurantData()
+    await this.getSimilarRestaurants()
     loading.close()
   },
   methods: {
@@ -78,9 +76,8 @@ export default {
     rateSuccess () {
       this.tostify('Dziękujemy za wysłanie opinii!', true)
     },
-    getRestaurantData (id) {
-      return this.$axios
-        .$get('/api/Restaurants/' + id)
+    getRestaurantData () {
+      return RestaurantRepository.getRestaurantById(this.$props.id)
         .then((response) => {
           this.currentRestaurant = response.data
         })
@@ -88,6 +85,17 @@ export default {
           console.log(error)
           this.tostify('Błąd! Nie można pobrać danych restauracji!')
         })
+    },
+    getSimilarRestaurants () {
+      return RestaurantRepository.getRecomendationsForRestaurant(
+        this.currentRestaurant.id, this.currentRestaurant.city, 5
+      ).then((response) => {
+        this.restaurants = response.data
+      })
+      .catch((error) => {
+        console.log(error)
+        this.tostify('Błąd! Nie można pobrać listy podobnych restauracji!')
+      })
     }
   }
 }
