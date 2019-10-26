@@ -35,6 +35,16 @@ namespace PizzatoWebApi
             services.AddSingleton<IRestaurantRepository, RestaurantRepository>();
             services.AddSingleton<IRecommenderService, RecommenderService>();
             services.AddTransient<ICsvDeserializer, CsvDeserializer>();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("front", policy =>
+                {
+                    policy.WithOrigins("http://localhost:3000")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +63,7 @@ namespace PizzatoWebApi
                 c.RoutePrefix = string.Empty;
             });
 
+            app.UseCors("front");
             app.UseMvc();
         }
     }
