@@ -16,12 +16,8 @@
       </div>
     </div>
     <div class="container">
-      <cards-list :cards="restaurants" label="Polecane" />
-      <cards-list
-        :cards="restaurants"
-        v-for="category in categories.slice(0, 2)"
-        :label="category.name"
-      />
+      <!-- <cards-list :cards="restaurants" label="Polecane" /> -->
+      <cards-list :cards="row.restaurants" v-for="row in rows" :label="row.heading" />
     </div>
   </div>
 </template>
@@ -33,7 +29,19 @@ import CardsList from '../components/CardsList'
 export default {
   name: 'HomePage',
   components: { CardsList },
-  computed: mapState(['categories', 'restaurants'])
+  computed: {
+    ...mapState({
+      rows: state => {
+        return state.categories.map(category => {
+          return ({
+            heading: category.name,
+            restaurants: state.restaurants.filter(restaurant => restaurant.tags.find(tag => tag === category.name))
+          })
+        })
+      },
+      restaurants: state => state.restaurants
+    }),
+  }
 }
 </script>
 

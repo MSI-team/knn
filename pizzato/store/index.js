@@ -10,7 +10,6 @@ export const mutations = {
     state.categories = categories.map((name, id) => ({ id, name }))
   },
   setRestaurants (state, restaurants = []) {
-    console.log(restaurants)
     state.restaurants = [
       ...state.restaurants,
       ...restaurants

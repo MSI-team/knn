@@ -1,22 +1,20 @@
 <template>
-  <div class="column">
     <div>
       <figure class="media">
         <p class="image">
-          <img src="https://bulma.io/images/placeholders/128x128.png" />
+          <img :src="this.cover" />
         </p>
       </figure>
-      <p class="title">xxxxxx</p>
-      <b-tag>Indyjskie</b-tag>
-      <b-tag>Fast-Food</b-tag>
-      <b-tag>+3</b-tag>
+      <p class="title">{{title}}</p>
+      <b-tag v-for="tag in reducedTags.list" :key="tag.id">{{ tag.tag }}</b-tag>
     </div>
-  </div>
 </template>
 
 <style>
 .tag {
   background-color: #ffd369 !important;
+  margin-right: 4px;
+  cursor: pointer;
 }
 
 .image {
@@ -29,6 +27,7 @@
   font-family: Rubik, sans-serif;
   font-size: 16px;
   cursor: pointer;
+  font-weight: 600;
   padding: 0;
   margin: 15px 0 !important;
 }
@@ -42,12 +41,24 @@ export default {
   props: {
     title: {
       type: String,
-      required: true
     },
-    icon: {
-      type: String,
-      required: true
+    tags: {
+      type: Array,
     }
+  },
+  computed: {
+      reducedTags () {
+        return {
+          list: [...this.tags.slice(0, 3).map((tag, id) => ({ id, tag })), ...(this.tags.length > 3 ? [{ id: 3, tag: `+${this.tags.length - 3}` }] : [])]
+        }
+      },
+      cover () {
+        if (this.image) {
+          return this.image
+        } else {
+          return "https://bulma.io/images/placeholders/128x128.png"
+        }
+      }
   }
 }
 </script>

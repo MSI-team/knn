@@ -3,12 +3,12 @@
     <h2 class="heading">{{ label }}</h2>
     <div class="columns">
       <div
-        class="column"
+        class="column is-4"
         v-for="card in cards"
         :key="card.id"
         v-bind="{card}"
       >
-        <card />
+        <card :title="card.name" :image="card.photoUrl" :tags="card.tags" />
       </div>
     </div>
   </div>
@@ -39,6 +39,6 @@ export default {
       type: Array,
       required: true
     }
-  },
+  }
 }
 </script>
