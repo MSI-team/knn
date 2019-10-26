@@ -33,14 +33,14 @@ module.exports = {
    */
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module'
+    // '@nuxtjs/eslint-module'
   ],
   /*
    ** Nuxt.js modules
    */
   modules: [
     // Doc: https://buefy.github.io/#/documentation
-    'nuxt-buefy',
+    ['nuxt-buefy', { css: '~/assets/global-styles.scss' }],
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios'
   ],
