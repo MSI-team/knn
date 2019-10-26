@@ -7,12 +7,10 @@
       <div class="column is-two-thirds details-container">
         <p class="title">{{currentRestaurant.name}}</p>
         <p class="subtitle">{{currentRestaurant.city}}</p>
-        <ul
-          v-for="attribute in currentRestaurant.tags"
-          v-bind:key="attribute.name"
-          class="attr-list"
-        >
-          <li>{{attribute.name}}</li>
+        <ul class="attr-list">
+          <li v-for="tag in currentRestaurant.tags">
+            {{tag}}
+          </li>
         </ul>
         <b-rate class="onBottom" @change="rateSuccess" custom-text="Oceń restaurację!"></b-rate>
       </div>
@@ -75,11 +73,8 @@ export default {
       this.tostify('Dziękujemy za wysłanie opinii!', true)
     },
     async initData () {
-      let data = await this.getRestaurantData()
-      
-      if (data) {
+        await this.getRestaurantData()
         await this.getSimilarRestaurants()
-      }
     },
     getRestaurantData () {
       return RestaurantRepository.getRestaurantById(this.$route.params.id)
@@ -89,7 +84,11 @@ export default {
           // this.$set(this.currentRestaurant, response.id, response)
           this.currentRestaurant.id = response.id;
           this.currentRestaurant.name = response.name;
-          // itd.
+          this.currentRestaurant.city = response.city;
+          this.currentRestaurant.photoUrl = response.photoUrl;
+
+          console.log(response.tags)
+          this.currentRestaurant.tags = [...response.tags];
         })
         .catch((error) => {
           console.log(error)
@@ -98,10 +97,10 @@ export default {
     },
     getSimilarRestaurants () {
       return RestaurantRepository.getRecomendationsForRestaurant(
-        this.currentRestaurant.id, this.currentRestaurant.city, 5
+        this.currentRestaurant.id, this.currentRestaurant.city, 4
       ).then((response) => {
         console.log(response)
-        this.$set(this.restaurants, response)
+        this.restaurants = response;
       })
       .catch((error) => {
         console.log(error)
