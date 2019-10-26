@@ -65,7 +65,7 @@ export default {
     const loading = this.$buefy.loading.open({
       container: null
     })
-    this.getRestaurantData(this.$props.id)
+    this.getRestaurantData(this.$props.id ? this.$props.id : 1)
     loading.close()
   },
   methods: {
@@ -80,7 +80,7 @@ export default {
     },
     getRestaurantData (id) {
       return this.$axios
-        .get('~/api/Restaurant/GetRestaurant?' + id)
+        .$get('/api/Restaurants/' + id)
         .then((response) => {
           this.currentRestaurant = response.data
         })
