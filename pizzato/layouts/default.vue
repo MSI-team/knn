@@ -110,6 +110,11 @@ $widescreen: 60px;
   margin-left: 15px;
 }
 
+.nav-button:hover {
+  background: #fff;
+  color: #ffd369;
+}
+
 .logo-content {
   font-family: Rubik, sans-serif;
   color: #fff;
