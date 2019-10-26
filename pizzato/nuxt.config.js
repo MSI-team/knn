@@ -23,7 +23,7 @@ module.exports = {
   /*
    ** Global CSS
    */
-  css: [],
+  css: ['~/assets/global-styles.css'],
   /*
    ** Plugins to load before mounting the App
    */
@@ -48,9 +48,7 @@ module.exports = {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {
-    baseURL: 'http://localhost:12337'
-  },
+  axios: {},
   /*
    ** Build configuration
    */

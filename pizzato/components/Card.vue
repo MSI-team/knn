@@ -12,9 +12,20 @@
 
 <style>
 .tag {
+  font-family: Rubik, sans-serif;
+  font-size: 13px;
   background-color: #ffd369 !important;
+  color: #e26241 !important;
   margin-right: 4px;
+  text-transform: uppercase;
+  font-weight: bold;
   cursor: pointer;
+}
+
+.tag:hover {
+  background-color: #940a37 !important;
+  color: white !important;
+  transition: .1s ease-in;
 }
 
 .image {
@@ -30,6 +41,9 @@
   font-weight: 600;
   padding: 0;
   margin: 15px 0 !important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .title:hover {
   color: #e26241;
@@ -44,6 +58,9 @@ export default {
     },
     tags: {
       type: Array,
+    },
+    image: {
+      type: String,
     }
   },
   computed: {

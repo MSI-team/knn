@@ -1,10 +1,10 @@
 <template>
-  <div class="cards--list">
+  <div class="cards-list">
     <h2 class="heading">{{ label }}</h2>
     <div class="columns">
       <div
-        class="column is-4"
-        v-for="card in cards"
+        class="column is-3"
+        v-for="card in cards.slice(0, 4)"
         :key="card.id"
         v-bind="{card}"
       >
@@ -21,6 +21,10 @@
   margin: 25px 0;
   padding-bottom: 20px;
   border-bottom: 1px solid #dadada;
+}
+
+.cards-list {
+  margin: 0 15px;
 }
 </style>
 
