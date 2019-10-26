@@ -39,12 +39,11 @@
 </template>
 
 <script>
-import CardsList from '../components/CardsList'
-import RestaurantRepository from '../repositories/restaurantRepository'
+import CardsList from '../../components/CardsList'
+import RestaurantRepository from '../../repositories/restaurantRepository'
 
 export default {
   name: "Details",
-  props: ['id'],
   components: { CardsList },
   data () {
     return {
@@ -62,8 +61,7 @@ export default {
     const loading = this.$buefy.loading.open({
       container: null
     })
-    await this.getRestaurantData()
-    await this.getSimilarRestaurants()
+    await this.initData();
     loading.close()
   },
   methods: {
@@ -76,8 +74,15 @@ export default {
     rateSuccess () {
       this.tostify('Dziękujemy za wysłanie opinii!', true)
     },
+    async initData () {
+      let data = await this.getRestaurantData()
+      
+      if (data) {
+        await this.getSimilarRestaurants()
+      }
+    },
     getRestaurantData () {
-      return RestaurantRepository.getRestaurantById(this.$props.id)
+      return RestaurantRepository.getRestaurantById(this.$route.params.id)
         .then((response) => {
           this.currentRestaurant = response.data
         })
