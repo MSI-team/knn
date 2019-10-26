@@ -22,7 +22,8 @@ namespace PizzatoWebApi.Services
                     Name = data[0].Trim(),
                     City = data[1].Trim(),
                     Address = data[2].Trim(),
-                    Tags = tags.Select(t=>t.Trim()).ToList()
+                    Tags = tags.Select(t => t.Trim()).ToList(),
+                    PhotoUrl = data[4].Trim()
                 });
             }
 
