@@ -4,16 +4,14 @@
       <div class="navbar-item center">
         <div class="container navbar-container columns">
           <div class="column is-4">
-            <p class="logo-content">
-              🍕Pizzato
-            </p>
+            <nuxt-link to="/">
+              <p class="logo-content">🍕Pizzato</p>
+            </nuxt-link>
           </div>
           <div class="dropdown-wrapper column is-8">
             <b-field class="file">
               <b-upload v-model="file">
-                <a class="button nav-button">
-                  Import Database
-                </a>
+                <a class="button nav-button">Import Database</a>
               </b-upload>
             </b-field>
             <b-dropdown aria-role="list">
@@ -24,13 +22,10 @@
               <b-dropdown-item
                 v-for="category in categories"
                 :key="category.id"
+                @click="selectCategory(category.name)"
                 aria-role="listitem"
-              >
-                {{ category.name }}
-              </b-dropdown-item>
-              <b-dropdown-item v-if="categories.length === 0" aria-role="listitem">
-                Import CSV
-              </b-dropdown-item>
+              >{{ category.name }}</b-dropdown-item>
+              <b-dropdown-item v-if="categories.length === 0" aria-role="listitem">Import CSV</b-dropdown-item>
             </b-dropdown>
           </div>
         </div>
@@ -47,7 +42,7 @@ import { mapState } from 'vuex'
 import { RepositoryFactory } from '../repositories/repositoryFactory'
 
 export default {
-  data () {
+  data() {
     return {
       file: null,
       items: [
@@ -64,12 +59,15 @@ export default {
       ]
     }
   },
-  computed: mapState([
-    'categories'
-  ]),
+  computed: mapState(['categories']),
   watch: {
-    file (value) {
+    file(value) {
       RepositoryFactory.get('csv').uploadCsv(value)
+    }
+  },
+  methods: {
+    selectCategory(value) {
+       this.$router.push({ query: { q: value } })
     }
   }
 }
@@ -107,12 +105,13 @@ $widescreen: 60px;
   font-weight: 600;
   cursor: pointer;
   align-self: center;
-  margin-left: 15px;
+  margin-right: 15px;
 }
 
 .nav-button:hover {
-  background: #fff;
-  color: #ffd369;
+    background-color: #940a37 !important;
+  color: white;
+  transition: .1s ease-in;
 }
 
 .logo-content {
@@ -129,11 +128,16 @@ $widescreen: 60px;
 
 .dropdown-wrapper {
   display: flex;
+  justify-content: flex-start;
 }
 
 @media (min-width: 769px) {
   .dropdown-wrapper {
     flex-direction: row-reverse;
+  }
+
+  .nav-button {
+    margin-left: 15px;
   }
 }
 

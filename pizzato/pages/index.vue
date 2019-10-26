@@ -2,22 +2,57 @@
   <div class="main-container">
     <div class="columns search_columns">
       <div class="container">
-        <div class="columns">
+        <div class="columns form-wrapper">
           <div class="column is-12">
             <p class="search-label">
               Search for restaurants and find your
-              <b>meal reacommendations!</b>
+              <b>meal recommendations!</b>
             </p>
-            <b-field>
-              <b-input class="search-input" size="is-large" type="search" icon="magnify" />
-            </b-field>
+            <div class="columns form-columns">
+              <div class="location-wrapper">
+                <b-dropdown class="city-dropdown" aria-role="list">
+                <button class="button city-button is-large" slot="trigger">
+                    <b-icon icon="near-me"></b-icon>
+                    <span>Location</span>
+                </button>
+
+            <b-dropdown-item aria-role="listitem">Action</b-dropdown-item>
+            <b-dropdown-item aria-role="listitem">Another action</b-dropdown-item>
+            <b-dropdown-item aria-role="listitem">Something else</b-dropdown-item>
+        </b-dropdown>
+              </div>
+              <div class="search-wrapper">
+                <b-field class="search-column column">
+                  <b-input
+                    v-model="searchInput"
+                    @keyup.enter.native="onSearch"
+                    class="search-input"
+                    size="is-large"
+                    type="search"
+                    icon="magnify"
+                  />
+                </b-field>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="container">
-      <!-- <cards-list :cards="restaurants" label="Polecane" /> -->
-      <cards-list :cards="row.restaurants" v-for="row in rows" :label="row.heading" />
+    <div class="container" v-if="!searchString">
+      <cards-list
+        :cards="row.restaurants"
+        v-for="row in rows"
+        :label="row.heading"
+        :key="row.heading"
+      />
+    </div>
+    <div class="container" v-else>
+      <cards-list
+        :cards="searchResults"
+        :label="'Search results for query: ' + searchString"
+        v-if="searchResults.length > 0"
+      />
+      <p class="message" v-else>No results found 😭</p>
     </div>
   </div>
 </template>
@@ -31,16 +66,44 @@ export default {
   components: { CardsList },
   computed: {
     ...mapState({
-      rows: state => {
-        return state.categories.map(category => {
-          return ({
+      rows: (state) => {
+        return state.categories.map((category) => {
+          return {
             heading: category.name,
-            restaurants: state.restaurants.filter(restaurant => restaurant.tags.find(tag => tag === category.name))
-          })
+            restaurants: state.restaurants.filter((restaurant) =>
+              restaurant.tags.find((tag) => tag === category.name)
+            )
+          }
         })
       },
-      restaurants: state => state.restaurants
+      restaurants: (state) => state.restaurants
     }),
+    searchString() {
+      return this.$route.query.q
+    },
+    searchResults() {
+      const query = this.$route.query.q
+      return this.$store.state.restaurants.filter((restaurant) => {
+        const nameMatch = restaurant.name
+          .toLowerCase()
+          .includes(query.toLowerCase())
+        const tagMatch =
+          restaurant.tags.filter((tag) =>
+            tag.toLowerCase().includes(query.toLowerCase())
+          ).length > 0
+        return nameMatch || tagMatch
+      })
+    }
+  },
+  methods: {
+    onSearch() {
+      this.$router.push({ query: { q: this.searchInput } })
+    }
+  },
+  data() {
+    return {
+      searchInput: ''
+    }
   }
 }
 </script>
@@ -59,7 +122,7 @@ section {
   padding-top: 10px;
   background: #e26241;
   width: 100%;
-  height: 175px;
+  height: 100%;
   margin: 0;
 }
 
@@ -72,8 +135,49 @@ section {
   font-weight: 400;
 }
 
+.form-wrapper {
+  margin: 0 15px;
+}
+
 .search-input {
   font-family: Rubik, sans-serif;
   margin: 5px 0;
+}
+
+.search-column {
+  padding-left: 0;
+}
+
+.message {
+  font-family: Rubik, sans-serif;
+  margin: 50px 0;
+}
+
+.city-dropdown {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.city-button {
+  width: 100%;
+}
+
+
+.search-wrapper {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .form-columns {
+    margin: 15px 0 !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .city-dropdown {
+    margin: 0 10px;
+  }
 }
 </style>
