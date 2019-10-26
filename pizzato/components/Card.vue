@@ -5,12 +5,12 @@
           <img :src="this.cover" />
         </p>
       </figure>
-      <p class="title">{{title}}</p>
+      <a :href="detailsLink"><p class="title">{{title}}</p></a>
       <b-tag v-for="tag in reducedTags.list" :key="tag.id">{{ tag.tag }}</b-tag>
     </div>
 </template>
 
-<style>
+<style scoped>
 .tag {
   font-family: Rubik, sans-serif;
   font-size: 13px;
@@ -53,6 +53,9 @@
 <script>
 export default {
   props: {
+    id: {
+      type: Number,
+    },
     title: {
       type: String,
     },
@@ -75,6 +78,9 @@ export default {
         } else {
           return "https://bulma.io/images/placeholders/128x128.png"
         }
+      },
+      detailsLink () { 
+        return `/details/${this.id}`
       }
   }
 }

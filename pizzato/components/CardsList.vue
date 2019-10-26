@@ -8,7 +8,7 @@
         :key="card.id"
         v-bind="{card}"
       >
-        <card :title="card.name" :image="card.photoUrl" :tags="card.tags" />
+        <card :id="card.id" :title="card.name" :image="card.photoUrl" :tags="card.tags" />
       </div>
     </div>
   </div>

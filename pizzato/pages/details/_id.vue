@@ -2,7 +2,7 @@
   <div class="container">
     <div class="columns restaurant-container">
       <div class="column">
-        <img :src="currentRestaurant.photoUrl" />
+        <img :src="getPhoto" />
       </div>
       <div class="column is-two-thirds details-container">
         <p class="title">{{currentRestaurant.name}}</p>
@@ -84,7 +84,12 @@ export default {
     getRestaurantData () {
       return RestaurantRepository.getRestaurantById(this.$route.params.id)
         .then((response) => {
-          this.currentRestaurant = response.data
+          console.log(response)
+          // console.log(this.$set)
+          // this.$set(this.currentRestaurant, response.id, response)
+          this.currentRestaurant.id = response.id;
+          this.currentRestaurant.name = response.name;
+          // itd.
         })
         .catch((error) => {
           console.log(error)
@@ -95,12 +100,24 @@ export default {
       return RestaurantRepository.getRecomendationsForRestaurant(
         this.currentRestaurant.id, this.currentRestaurant.city, 5
       ).then((response) => {
-        this.restaurants = response.data
+        console.log(response)
+        this.$set(this.restaurants, response)
       })
       .catch((error) => {
         console.log(error)
         this.tostify('Błąd! Nie można pobrać listy podobnych restauracji!')
       })
+    }
+  },
+  computed: {
+    getPhoto () {
+      const baseImageUrl = "https://bulma.io/images/placeholders/128x128.png"
+
+      if (this.currentRestaurant) {
+        return this.currentRestaurant.photoUrl
+      }
+
+      return baseImageUrl;
     }
   }
 }
