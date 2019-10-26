@@ -3,8 +3,8 @@
     <h2 class="heading">{{ label }}</h2>
     <div class="columns">
       <div
-        class="column is-4"
-        v-for="card in cards"
+        class="column is-3"
+        v-for="card in cards.slice(0, 4)"
         :key="card.id"
         v-bind="{card}"
       >

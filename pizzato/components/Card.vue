@@ -41,6 +41,9 @@
   font-weight: 600;
   padding: 0;
   margin: 15px 0 !important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .title:hover {
   color: #e26241;
@@ -55,6 +58,9 @@ export default {
     },
     tags: {
       type: Array,
+    },
+    image: {
+      type: String,
     }
   },
   computed: {

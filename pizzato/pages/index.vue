@@ -158,6 +158,7 @@ section {
   width: 100%;
   display: flex;
   align-items: center;
+  font-family: Rubik, sans-serif;
 }
 
 .city-button {
