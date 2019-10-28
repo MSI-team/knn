@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     selectCategory(value) {
-       this.$router.push({ query: { q: value } })
+       this.$router.push({ path: '/', query: { q: value } })
     }
   }
 }
