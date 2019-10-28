@@ -61,8 +61,9 @@ export default {
   },
   computed: mapState(['categories']),
   watch: {
-    file(value) {
-      RepositoryFactory.get('csv').uploadCsv(value)
+    async file(value) {
+      await RepositoryFactory.get('csv').uploadCsv(value)
+      window.location = '/';
     }
   },
   methods: {
