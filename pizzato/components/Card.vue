@@ -6,7 +6,11 @@
         </p>
       </figure>
       <a :href="detailsLink"><p class="title">{{title}}</p></a>
-      <b-tag v-for="tag in reducedTags.list" :key="tag.id">{{ tag.tag }}</b-tag>
+      <span v-for="tag in reducedTags.list" :key="tag.id">
+          <a :href="tagLink(tag)">
+            <b-tag>{{tag.tag}}</b-tag>
+          </a>
+      </span>
     </div>
 </template>
 
@@ -64,6 +68,11 @@ export default {
     },
     image: {
       type: String,
+    }
+  },
+  methods: {
+    tagLink (tag) {
+      return tag.tag.match(/[a-zA-Z\s]+/) ? `/?q=${tag.tag}` : '#'
     }
   },
   computed: {
