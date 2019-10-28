@@ -2,16 +2,27 @@
   <div class="container">
     <div class="columns restaurant-container">
       <div class="column">
-        <img :src="getPhoto" />
+        <img :src="getPhoto" class="main-img"/>
       </div>
       <div class="column is-two-thirds details-container">
         <p class="title">{{currentRestaurant.name}}</p>
         <p class="subtitle">{{currentRestaurant.city}}</p>
-        <ul class="attr-list">
-          <li v-for="tag in currentRestaurant.tags">
-            {{tag}}
-          </li>
-        </ul>
+        <div class="columns">
+          <div class="column">
+            <ul class="attr-list">
+              <li v-for="tag in getFirstTagColumn">
+                <detail-tag :tag="tag" />
+              </li>
+            </ul>
+          </div>
+          <div class="column">
+            <ul class="attr-list">
+              <li v-for="tag in getLastTagColumn">
+                <detail-tag :tag="tag" />
+              </li>
+            </ul>
+          </div>
+        </div>
         <b-rate class="onBottom" @change="rateSuccess" custom-text="Oceń restaurację!"></b-rate>
       </div>
     </div>
@@ -37,12 +48,13 @@
 </template>
 
 <script>
+import DetailTag from '../../components/DetailTag'
 import CardsList from '../../components/CardsList'
 import RestaurantRepository from '../../repositories/restaurantRepository'
 
 export default {
   name: "Details",
-  components: { CardsList },
+  components: { CardsList, DetailTag },
   data () {
     return {
       currentRestaurant: {
@@ -117,6 +129,13 @@ export default {
       }
 
       return baseImageUrl;
+    },
+    getFirstTagColumn () {
+      return this.currentRestaurant.tags.slice(0, 10)
+    },
+    getLastTagColumn () {
+      const length = this.currentRestaurant.tags.length;
+      return length - 10 < 0 ? [] : this.currentRestaurant.tags.slice(10, length)
     }
   }
 }
@@ -138,5 +157,11 @@ export default {
 .onBottom {
   position: absolute;
   bottom: 0;
+}
+
+@media (min-width : 960px) {
+  .main-img {
+    min-width: 100%;
+  }
 }
 </style>
