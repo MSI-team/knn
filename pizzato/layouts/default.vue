@@ -2,7 +2,10 @@
   <div class="wrapper">
     <nav class="navbar header is-primary" role="navigation" aria-label="main navigation">
       <div class="navbar-item center">
-        <div class="container navbar-container columns">
+        <div
+          class="container navbar-container columns"
+          v-bind:class="{ 'border-nav': $route.path == '/' }"
+        >
           <div class="column is-4">
             <nuxt-link to="/">
               <p class="logo-content">🍕Pizzato</p>
@@ -45,30 +48,19 @@ export default {
   data() {
     return {
       file: null,
-      items: [
-        {
-          title: 'Home',
-          icon: 'home',
-          to: { name: 'index' }
-        },
-        {
-          title: 'Inspire',
-          icon: 'lightbulb',
-          to: { name: 'inspire' }
-        }
-      ]
+      mainPage: true
     }
   },
   computed: mapState(['categories']),
   watch: {
     async file(value) {
       await RepositoryFactory.get('csv').uploadCsv(value)
-      window.location = '/';
+      window.location = '/'
     }
   },
   methods: {
     selectCategory(value) {
-       this.$router.push({ path: '/', query: { q: value } })
+      this.$router.push({ path: '/', query: { q: value } })
     }
   }
 }
@@ -83,7 +75,6 @@ $widescreen: 60px;
 }
 .navbar-container {
   width: 100%;
-  border-bottom: 1px solid #fff;
   margin: 0;
 }
 
@@ -96,6 +87,11 @@ $widescreen: 60px;
   flex-grow: 1;
   flex-direction: column;
   justify-content: center;
+  padding-bottom: 0;
+}
+
+.border-nav {
+  border-bottom: 1px solid #fff;
 }
 
 .nav-button {
@@ -110,9 +106,9 @@ $widescreen: 60px;
 }
 
 .nav-button:hover {
-    background-color: #940a37 !important;
+  background-color: #940a37 !important;
   color: white;
-  transition: .1s ease-in;
+  transition: 0.1s ease-in;
 }
 
 .logo-content {

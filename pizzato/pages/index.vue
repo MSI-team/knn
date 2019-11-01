@@ -11,15 +11,14 @@
             <div class="columns form-columns">
               <div class="location-wrapper">
                 <b-dropdown class="city-dropdown" aria-role="list">
-                <button class="button city-button is-large" slot="trigger">
+                  <button class="button city-button is-large" slot="trigger">
                     <b-icon icon="near-me"></b-icon>
                     <span>Location</span>
-                </button>
-
-            <b-dropdown-item aria-role="listitem">Action</b-dropdown-item>
-            <b-dropdown-item aria-role="listitem">Another action</b-dropdown-item>
-            <b-dropdown-item aria-role="listitem">Something else</b-dropdown-item>
-        </b-dropdown>
+                  </button>
+                  <b-dropdown-item aria-role="listitem">Action</b-dropdown-item>
+                  <b-dropdown-item aria-role="listitem">Another action</b-dropdown-item>
+                  <b-dropdown-item aria-role="listitem">Something else</b-dropdown-item>
+                </b-dropdown>
               </div>
               <div class="search-wrapper">
                 <b-field class="search-column column">
@@ -39,6 +38,12 @@
       </div>
     </div>
     <div class="container" v-if="!searchString">
+      <cards-list
+        :cards="rate.similar"
+        v-for="rate in rated"
+        :label="'Recommended based on ' + rate.current.name"
+        :key="rate.current.name"
+      />
       <cards-list
         :cards="row.restaurants"
         v-for="row in rows"
@@ -100,9 +105,17 @@ export default {
       this.$router.push({ query: { q: this.searchInput } })
     }
   },
+  beforeMount() {
+    if (window.localStorage) {
+      const rated = JSON.parse(localStorage.getItem('rated_restaurants')) || [];
+      this.rated = rated;
+    }
+    console.log(this.rated);
+  },
   data() {
     return {
-      searchInput: ''
+      searchInput: '',
+      rated: [],
     }
   }
 }
@@ -164,7 +177,6 @@ section {
 .city-button {
   width: 100%;
 }
-
 
 .search-wrapper {
   flex: 1;
