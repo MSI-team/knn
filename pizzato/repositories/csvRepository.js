@@ -2,7 +2,7 @@ import axios from 'axios'
 import config from '../nuxt.config.js'
 
 const Repository = axios.create({
-  baseURL: config.backendUrl,
+  baseURL: `${config.backendUrl}/restaurants/import`,
   headers: { 'Content-Type': `multipart/form-data` }
 })
 
