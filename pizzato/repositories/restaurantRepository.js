@@ -1,16 +1,14 @@
 import axios from 'axios'
-
-const baseDomain = 'http://localhost:5000'
-const baseURL = `${baseDomain}/api`
+import config from '../nuxt.config.js'
 
 const Repository = axios.create({
-  baseURL
+  baseURL: config.backendUrl
 })
 
 export default {
-  async getRestaurantById (id) {
+  async getRestaurantById(id) {
     try {
-      const { data } = await Repository.get(`/Restaurants/${id}`)     
+      const { data } = await Repository.get(`/Restaurants/${id}`)
       if (data) {
         return data
       } else {
@@ -22,7 +20,7 @@ export default {
       )
     }
   },
-  async getRestaurantsByCategory (category) {
+  async getRestaurantsByCategory(category) {
     try {
       const { data } = await Repository.get(`/Tags/${category}`)
       if (data) {
@@ -36,7 +34,7 @@ export default {
       )
     }
   },
-  async getAll () {
+  async getAll() {
     const { data } = await Repository.get(`/Restaurants`)
     if (data) {
       return data
@@ -44,8 +42,10 @@ export default {
       return []
     }
   },
-  async getRecomendationsForRestaurant (id, city, recommendationsCount) {
-    const { data } = await Repository.get(`/Recommend/${id}/${city}/${recommendationsCount}`)
+  async getRecomendationsForRestaurant(id, city, recommendationsCount) {
+    const { data } = await Repository.get(
+      `/Recommend/${id}/${city}/${recommendationsCount}`
+    )
     if (data) {
       return data
     } else {

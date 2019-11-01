@@ -1,14 +1,12 @@
 import axios from 'axios'
-
-const baseDomain = 'http://localhost:5000'
-const baseURL = `${baseDomain}/api/Tags`
+import config from '../nuxt.config.js'
 
 const Repository = axios.create({
-  baseURL
+  baseURL: config.backendUrl,
 })
 
 export default {
-  async getCategories () {
+  async getCategories() {
     const { data } = await Repository.get()
     if (data) {
       return data

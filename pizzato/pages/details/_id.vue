@@ -2,7 +2,7 @@
   <div class="container">
     <div class="columns restaurant-container">
       <div class="column">
-        <img :src="getPhoto" class="main-img"/>
+        <img :src="getPhoto" class="main-img" />
       </div>
       <div class="column is-two-thirds details-container">
         <p class="title">{{currentRestaurant.name}}</p>
@@ -26,22 +26,7 @@
         <b-rate class="onBottom" @change="rateSuccess" custom-text="Oceń restaurację!"></b-rate>
       </div>
     </div>
-
-    <!-- podobne -->
     <div class="similar-container">
-      <!-- <p class="title">Podobne</p>
-      <nav class="level">
-        <div
-          v-for="restaurant in restaurants"
-          v-bind:key="restaurant.id"
-          class="level-item has-text-centered"
-        >
-          <a href="#">
-            <img :src="restaurant.imageUrl" width="64" />
-            <p>{{restaurant.name}}</p>
-          </a>
-        </div>
-      </nav> -->
       <cards-list :cards="restaurants" :label="'Polecane'" />
     </div>
   </div>
@@ -53,9 +38,9 @@ import CardsList from '../../components/CardsList'
 import RestaurantRepository from '../../repositories/restaurantRepository'
 
 export default {
-  name: "Details",
+  name: 'Details',
   components: { CardsList, DetailTag },
-  data () {
+  data() {
     return {
       currentRestaurant: {
         id: 0,
@@ -67,75 +52,82 @@ export default {
       restaurants: []
     }
   },
-  async beforeMount () {
+  async beforeMount() {
     const loading = this.$buefy.loading.open({
       container: null
     })
-    await this.initData();
+    await this.initData()
     loading.close()
   },
   methods: {
-    tostify (toastMessage, success) {
+    tostify(toastMessage, success) {
       this.$buefy.toast.open({
         message: toastMessage,
         type: success ? 'is-success' : 'is-warning'
       })
     },
-    rateSuccess () {
+    rateSuccess() {
+      if (window.localStorage) {
+        const rated = JSON.parse(localStorage.getItem("rated_restaurants")) || [];
+        const newRated = [{ current: this.currentRestaurant, similar: this.restaurants }, ...rated];
+        localStorage.setItem("rated_restaurants", JSON.stringify(newRated));
+      }
       this.tostify('Dziękujemy za wysłanie opinii!', true)
     },
-    async initData () {
-        await this.getRestaurantData()
-        await this.getSimilarRestaurants()
+    async initData() {
+      await this.getRestaurantData()
+      await this.getSimilarRestaurants()
     },
-    getRestaurantData () {
+    getRestaurantData() {
       return RestaurantRepository.getRestaurantById(this.$route.params.id)
         .then((response) => {
-          console.log(response)
-          // console.log(this.$set)
-          // this.$set(this.currentRestaurant, response.id, response)
-          this.currentRestaurant.id = response.id;
-          this.currentRestaurant.name = response.name;
-          this.currentRestaurant.city = response.city;
-          this.currentRestaurant.photoUrl = response.photoUrl;
+          this.currentRestaurant.id = response.id
+          this.currentRestaurant.name = response.name
+          this.currentRestaurant.city = response.city
+          this.currentRestaurant.photoUrl = response.photoUrl
 
           console.log(response.tags)
-          this.currentRestaurant.tags = [...response.tags];
+          this.currentRestaurant.tags = [...response.tags]
         })
         .catch((error) => {
           console.log(error)
           this.tostify('Błąd! Nie można pobrać danych restauracji!')
         })
     },
-    getSimilarRestaurants () {
+    getSimilarRestaurants() {
       return RestaurantRepository.getRecomendationsForRestaurant(
-        this.currentRestaurant.id, this.currentRestaurant.city, 4
-      ).then((response) => {
-        console.log(response)
-        this.restaurants = response;
-      })
-      .catch((error) => {
-        console.log(error)
-        this.tostify('Błąd! Nie można pobrać listy podobnych restauracji!')
-      })
+        this.currentRestaurant.id,
+        this.currentRestaurant.city,
+        4
+      )
+        .then((response) => {
+          console.log(response)
+          this.restaurants = response
+        })
+        .catch((error) => {
+          console.log(error)
+          this.tostify('Błąd! Nie można pobrać listy podobnych restauracji!')
+        })
     }
   },
   computed: {
-    getPhoto () {
-      const baseImageUrl = "https://bulma.io/images/placeholders/128x128.png"
+    getPhoto() {
+      const baseImageUrl = 'https://bulma.io/images/placeholders/128x128.png'
 
       if (this.currentRestaurant) {
         return this.currentRestaurant.photoUrl
       }
 
-      return baseImageUrl;
+      return baseImageUrl
     },
-    getFirstTagColumn () {
+    getFirstTagColumn() {
       return this.currentRestaurant.tags.slice(0, 10)
     },
-    getLastTagColumn () {
-      const length = this.currentRestaurant.tags.length;
-      return length - 10 < 0 ? [] : this.currentRestaurant.tags.slice(10, length)
+    getLastTagColumn() {
+      const length = this.currentRestaurant.tags.length
+      return length - 10 < 0
+        ? []
+        : this.currentRestaurant.tags.slice(10, length)
     }
   }
 }
@@ -159,7 +151,7 @@ export default {
   bottom: 0;
 }
 
-@media (min-width : 960px) {
+@media (min-width: 960px) {
   .main-img {
     min-width: 100%;
   }

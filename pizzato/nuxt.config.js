@@ -57,5 +57,7 @@ module.exports = {
      ** You can extend webpack config here
      */
     extend(config, ctx) {}
-  }
+  },
+  dev: (process.env.NODE_ENV !== 'production'),
+  backendUrl: process.env.NODE_ENV !== 'production' ? 'http://localhost:5000' : 'http://backend:5000'
 }
