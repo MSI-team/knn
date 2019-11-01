@@ -13,11 +13,14 @@
                 <b-dropdown class="city-dropdown" aria-role="list">
                   <button class="button city-button is-large" slot="trigger">
                     <b-icon icon="near-me"></b-icon>
-                    <span>Location</span>
+                    <span>{{ this.$route.query.city || "Location" }}</span>
                   </button>
-                  <b-dropdown-item aria-role="listitem">Action</b-dropdown-item>
-                  <b-dropdown-item aria-role="listitem">Another action</b-dropdown-item>
-                  <b-dropdown-item aria-role="listitem">Something else</b-dropdown-item>
+                   <b-dropdown-item
+                    v-for="city in cities"
+                    :key="city.id"
+                    @click="selectCity(city)"
+                    aria-role="listitem"
+                  >{{ city }}</b-dropdown-item>
                 </b-dropdown>
               </div>
               <div class="search-wrapper">
@@ -38,14 +41,16 @@
       </div>
     </div>
     <div class="container" v-if="!searchString">
+      <client-only>
       <cards-list
         :cards="rate.similar"
         v-for="rate in rated"
         :label="'Recommended based on ' + rate.current.name"
         :key="rate.current.name"
       />
+      </client-only>
       <cards-list
-        :cards="row.restaurants"
+        :cards="row.restaurants.filter(r => $route.query.city ? r.city === $route.query.city : true)"
         v-for="row in rows"
         :label="row.heading"
         :key="row.heading"
@@ -55,7 +60,7 @@
       <cards-list
         :cards="searchResults"
         :label="'Search results for query: ' + searchString"
-        v-if="searchResults.length > 0"
+        v-if="this.$route.query.q || searchResults.length > 0"
       />
       <p class="message" v-else>No results found 😭</p>
     </div>
@@ -71,6 +76,7 @@ export default {
   components: { CardsList },
   computed: {
     ...mapState({
+      cities: (state) => state.cities,
       rows: (state) => {
         return state.categories.map((category) => {
           return {
@@ -87,7 +93,9 @@ export default {
       return this.$route.query.q
     },
     searchResults() {
-      const query = this.$route.query.q
+      const query = this.$route.query.q;
+      const city = this.$route.query.city;
+      if(!query) return [];
       return this.$store.state.restaurants.filter((restaurant) => {
         const nameMatch = restaurant.name
           .toLowerCase()
@@ -95,22 +103,26 @@ export default {
         const tagMatch =
           restaurant.tags.filter((tag) =>
             tag.toLowerCase().includes(query.toLowerCase())
-          ).length > 0
-        return nameMatch || tagMatch
+          ).length > 0;
+        
+        const inCity = this.$route.query.city ? restaurant.city === this.$route.query.city : true
+        return inCity && (nameMatch || tagMatch)
       })
     }
   },
   methods: {
     onSearch() {
-      this.$router.push({ query: { q: this.searchInput } })
-    }
+      this.$router.push({ query: { ...this.$route.query, q: this.searchInput } })
+    },
+    selectCity(city) {
+      this.$router.push({ query: { ...this.$route.query, city } });
+    },
   },
   beforeMount() {
     if (window.localStorage) {
       const rated = JSON.parse(localStorage.getItem('rated_restaurants')) || [];
       this.rated = rated;
     }
-    console.log(this.rated);
   },
   data() {
     return {
@@ -175,7 +187,12 @@ section {
 }
 
 .city-button {
-  width: 100%;
+  width: 150px;
+}
+
+.city-button > span {
+  font-family: Rubik, sans-serif;
+  font-size: 14px;
 }
 
 .search-wrapper {

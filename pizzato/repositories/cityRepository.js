@@ -2,12 +2,12 @@ import axios from 'axios'
 import config from '../nuxt.config.js'
 
 const Repository = axios.create({
-  baseURL: config.backendUrl,
+  baseURL: config.backendUrl
 })
 
 export default {
-  async getCategories () {
-    const { data } = await Repository.get("/Tags")
+  async getCities() {
+    const { data } = await Repository.get('/Cities')
     if (data) {
       return data
     } else {

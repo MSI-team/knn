@@ -27,6 +27,20 @@
       </div>
     </div>
     <div class="similar-container">
+      <div class="similar-city">
+        <p class="similar-filter">
+          Znajdź podobną restaurację w:
+          <b-dropdown class="city-dropdown" aria-role="list">
+            <span slot="trigger">{{ selectedCity || "Location" }}</span>
+            <b-dropdown-item
+              v-for="city in cities"
+              :key="city.id"
+              @click="selectCity(city)"
+              aria-role="listitem"
+            >{{ city }}</b-dropdown-item>
+          </b-dropdown>
+        </p>
+      </div>
       <cards-list :cards="restaurants" :label="'Polecane'" />
     </div>
   </div>
@@ -36,12 +50,14 @@
 import DetailTag from '../../components/DetailTag'
 import CardsList from '../../components/CardsList'
 import RestaurantRepository from '../../repositories/restaurantRepository'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Details',
   components: { CardsList, DetailTag },
   data() {
     return {
+      selectedCity: "",
       currentRestaurant: {
         id: 0,
         photoUrl: '',
@@ -66,11 +82,18 @@ export default {
         type: success ? 'is-success' : 'is-warning'
       })
     },
+    selectCity(city) {
+      this.selectedCity = city;
+    },
     rateSuccess() {
       if (window.localStorage) {
-        const rated = JSON.parse(localStorage.getItem("rated_restaurants")) || [];
-        const newRated = [{ current: this.currentRestaurant, similar: this.restaurants }, ...rated];
-        localStorage.setItem("rated_restaurants", JSON.stringify(newRated));
+        const rated =
+          JSON.parse(localStorage.getItem('rated_restaurants')) || []
+        const newRated = [
+          { current: this.currentRestaurant, similar: this.restaurants },
+          ...rated
+        ]
+        localStorage.setItem('rated_restaurants', JSON.stringify(newRated))
       }
       this.tostify('Dziękujemy za wysłanie opinii!', true)
     },
@@ -97,7 +120,7 @@ export default {
     getSimilarRestaurants() {
       return RestaurantRepository.getRecomendationsForRestaurant(
         this.currentRestaurant.id,
-        this.currentRestaurant.city,
+        this.selectedCity || this.currentRestaurant.city,
         4
       )
         .then((response) => {
@@ -111,6 +134,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      cities: (state) => state.cities
+    }),
     getPhoto() {
       const baseImageUrl = 'https://bulma.io/images/placeholders/128x128.png'
 
@@ -129,6 +155,11 @@ export default {
         ? []
         : this.currentRestaurant.tags.slice(10, length)
     }
+  },
+  watch: {
+    async selectedCity() {
+      await this.getSimilarRestaurants();
+    }
   }
 }
 </script>
@@ -144,6 +175,19 @@ export default {
 
 .similar-container {
   margin-top: 3em;
+}
+
+.similar-city {
+  display: flex;
+}
+
+.similar-filter {
+  padding: 0 15px;
+  font-family: Rubik, sans-serif;
+}
+
+.similar-filter span {
+  color: #e26241;
 }
 
 .onBottom {
