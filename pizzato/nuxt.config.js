@@ -58,6 +58,11 @@ module.exports = {
      */
     extend(config, ctx) {}
   },
-  dev: (process.env.NODE_ENV !== 'production'),
-  backendUrl: process.env.NODE_ENV !== 'production' ? 'http://localhost:5000/api' : 'http://backend:5000/api'
+  dev: process.env.NODE_ENV !== 'production',
+  backendUrl:
+    process.env.NODE_ENV !== 'production'
+      ? 'http://localhost:5000/api'
+      : typeof window !== 'undefined'
+      ? '/api'
+      : 'http://backend:5000/api'
 }

@@ -40,7 +40,7 @@ namespace PizzatoWebApi
             {
                 options.AddPolicy("front", policy =>
                 {
-                    policy.WithOrigins("http://localhost:3000")
+                    policy.WithOrigins("*")
                         .AllowAnyMethod()
                         .AllowAnyHeader();
                 });
