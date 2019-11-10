@@ -33,7 +33,8 @@
 }
 
 .image {
-  width: 100%;
+  width: 128px;
+  height: auto;
   overflow: hidden;
   background-color: #dadada;
 }

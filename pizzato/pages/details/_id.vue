@@ -10,14 +10,14 @@
         <div class="columns">
           <div class="column">
             <ul class="attr-list">
-              <li v-for="tag in getFirstTagColumn">
+              <li v-for="tag in getFirstTagColumn" :key="tag">
                 <detail-tag :tag="tag" />
               </li>
             </ul>
           </div>
           <div class="column">
             <ul class="attr-list">
-              <li v-for="tag in getLastTagColumn">
+              <li v-for="tag in getLastTagColumn" :key="tag">
                 <detail-tag :tag="tag" />
               </li>
             </ul>
@@ -121,11 +121,12 @@ export default {
       return RestaurantRepository.getRecomendationsForRestaurant(
         this.currentRestaurant.id,
         this.selectedCity || this.currentRestaurant.city,
-        4
+        8
       )
         .then((response) => {
-          console.log(response)
-          this.restaurants = response
+          if (response && response.length) {
+            this.restaurants = [...response];
+          }
         })
         .catch((error) => {
           console.log(error)
