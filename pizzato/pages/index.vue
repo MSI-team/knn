@@ -13,7 +13,7 @@
                 <b-dropdown class="city-dropdown" aria-role="list">
                   <button class="button city-button is-large" slot="trigger">
                     <b-icon icon="near-me"></b-icon>
-                    <span>{{ this.$route.query.city || "Location" }}</span>
+                    <span>{{ this.searchCity || this.$route.query.city || "Location" }}</span>
                   </button>
                    <b-dropdown-item
                     v-for="city in cities"
@@ -112,9 +112,10 @@ export default {
   },
   methods: {
     onSearch() {
-      this.$router.push({ query: { ...this.$route.query, q: this.searchInput } })
+      this.$router.push({ query: { ...this.$route.query, q: this.searchInput, city: this.searchCity } })
     },
     selectCity(city) {
+      this.searchCity = city;
       this.$router.push({ query: { ...this.$route.query, city } });
     },
   },
@@ -126,6 +127,7 @@ export default {
   },
   data() {
     return {
+      searchCity: '',
       searchInput: '',
       rated: [],
     }
