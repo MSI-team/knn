@@ -49,7 +49,7 @@
         :key="rate.current.name"
       />
       </client-only>
-      <cards-list
+      <lazy-card-list
         :cards="row.restaurants.filter(r => $route.query.city ? r.city === $route.query.city : true)"
         v-for="row in rows"
         :label="row.heading"
@@ -69,11 +69,11 @@
 
 <script>
 import { mapState } from 'vuex'
-import CardsList from '../components/CardsList'
+import LazyCardList from '../components/LazyCardList'
 
 export default {
   name: 'HomePage',
-  components: { CardsList },
+  components: { LazyCardList },
   computed: {
     ...mapState({
       cities: (state) => state.cities,
