@@ -1,9 +1,8 @@
 <template>
   <div class="cards-list">
-    <h2 class="heading">{{ label }}</h2>
-    
+    <h2 class="heading"  v-if="cardList.length > 0">{{ label }}</h2>
     <!-- Normal View -->
-    <div class="columns" v-if="cardList.length < 5">
+    <div v-bind:class="{ wrap: list, 'columns': true }" v-if="list || cardList.length < 5">
       <div
         class="column is-3"
         v-for="card in cardList"
@@ -55,6 +54,9 @@ export default {
     cards: {
       type: Array,
       required: true
+    },
+    list: {
+      type: Boolean,
     }
   },
   methods: {
@@ -106,6 +108,10 @@ export default {
   border-bottom: 1px solid #dadada;
 }
 
+.wrap {
+  flex-wrap: wrap;
+}
+
 .cards-list {
   margin: 0 15px;
 }
@@ -154,8 +160,8 @@ export default {
   height: 15px;
   padding: 10px;
   box-sizing: border-box;
-  border-top: 2px solid #42b883;
-  border-right: 2px solid #42b883;
+  border-top: 2px solid #ffd369;
+  border-right: 2px solid #ffd369;
   cursor: pointer;
   margin: 0 20px;
   transition: transform 150ms linear;

@@ -31,7 +31,7 @@
         <p class="similar-filter">
           Znajdź podobną restaurację w:
           <b-dropdown class="city-dropdown" aria-role="list">
-            <span slot="trigger">{{ selectedCity || "Location" }}</span>
+            <span slot="trigger">{{ selectedCity || currentRestaurant.city || "Wybierz Lokalizację" }}</span>
             <b-dropdown-item
               v-for="city in cities"
               :key="city.id"
@@ -41,7 +41,7 @@
           </b-dropdown>
         </p>
       </div>
-      <cards-list :cards="restaurants" :label="'Polecane'" />
+      <cards-list :list="true" :cards="restaurants" :label="'Polecane'" />
     </div>
   </div>
 </template>
@@ -100,6 +100,15 @@ export default {
     async initData() {
       await this.getRestaurantData()
       await this.getSimilarRestaurants()
+                    if (window.localStorage) {
+      const rated =
+        JSON.parse(localStorage.getItem('rated_restaurants')) || []
+      const newRated = [
+        { current: this.currentRestaurant, similar: this.restaurants },
+        ...rated
+      ]
+      localStorage.setItem('rated_restaurants', JSON.stringify(newRated))
+    }
     },
     getRestaurantData() {
       return RestaurantRepository.getRestaurantById(this.$route.params.id)
@@ -109,7 +118,6 @@ export default {
           this.currentRestaurant.city = response.city
           this.currentRestaurant.photoUrl = response.photoUrl
 
-          console.log(response.tags)
           this.currentRestaurant.tags = [...response.tags]
         })
         .catch((error) => {

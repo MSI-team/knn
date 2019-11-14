@@ -42,27 +42,32 @@
     </div>
     <div class="container" v-if="!searchString">
       <client-only>
-      <cards-list
+      <lazy-card-list
         :cards="rate.similar"
         v-for="rate in rated"
         :label="'Recommended based on ' + rate.current.name"
         :key="rate.current.name"
       />
       </client-only>
+      <client-only>
       <lazy-card-list
         :cards="row.restaurants.filter(r => $route.query.city ? r.city === $route.query.city : true)"
         v-for="row in rows"
         :label="row.heading"
         :key="row.heading"
       />
+</client-only>
     </div>
     <div class="container" v-else>
+      <client-only>
       <cards-list
+        :list="true"
         :cards="searchResults"
         :label="'Search results for query: ' + searchString"
         v-if="this.$route.query.q || searchResults.length > 0"
       />
       <p class="message" v-else>No results found 😭</p>
+      </client-only>
     </div>
   </div>
 </template>
@@ -70,10 +75,11 @@
 <script>
 import { mapState } from 'vuex'
 import LazyCardList from '../components/LazyCardList'
+import CardsList from '../components/CardsList'
 
 export default {
   name: 'HomePage',
-  components: { LazyCardList },
+  components: { CardsList, LazyCardList },
   computed: {
     ...mapState({
       cities: (state) => state.cities,
